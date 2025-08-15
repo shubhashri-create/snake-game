@@ -28,12 +28,23 @@ while game_on:
     snake.move_snake()
 
     #collusion food with snake
-    if snake.head.distance(food) < 10:
+    # Collision with food
+    if snake.head.distance(food) < 15:
         food.refresh()
+        snake.extend_segment()
         scoreboard.increase_score()
-    # collusion with wall
-    if snake.head.xcor() > 280 or snake.head.xcor() < -280 or snake.head.ycor() > 280 or snake.head.ycor() < -280:
+
+    # Collision with wall
+    if (snake.head.xcor() > 280 or snake.head.xcor() < -280 or
+            snake.head.ycor() > 280 or snake.head.ycor() < -280):
         game_on = False
         scoreboard.over()
+
+    # Collision with tail
+    if len(snake.segments) > 3:
+      for segment in snake.segments[1:]:
+        if snake.head.distance(segment) < 10:
+            game_on = False
+            scoreboard.over()
 
 screen.exitonclick()
